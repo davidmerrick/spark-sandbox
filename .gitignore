@@ -1,0 +1,10 @@
+.gradle
+build
+.env
+.envrc
+.serverless
+out
+
+.idea
+!.idea/dictionaries
+!.idea/dictionaries/*
