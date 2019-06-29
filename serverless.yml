@@ -5,38 +5,16 @@ provider:
   runtime: java8
   stage: ${opt:stage, "dev"}
   region: us-west-2
-  memorySize: 512
+  memorySize: 256
   timeout: 20
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:Scan
-        - dynamodb:Query
-      Resource: "*"
-  environment:
-    DYNAMODB_ENDPOINT: ${self:custom.dynamoEndpoint}
-    DYNAMODB_REGION: ${self:provider.region}
-    CALENDAR_TABLE_NAME: ${self:custom.calendarTableName}
-    FILTER_TABLE_NAME: ${self:custom.filterTableName}
-    GEOCODER_API_KEY: ${env:GEOCODER_API_KEY}
 
 package:
-  artifact: build/libs/${self:service}.jar
+  artifact: build/libs/${self:service}-all.jar
 
 functions:
-  filter:
-    handler: com.merricklabs.aion.handlers.FilterHandler
+  hello:
+    handler: com.merricklabs.sparksandbox.StreamLambdaHandler
     events:
       - http:
-          path: /filters
-          method: post
-      - http:
-          path: /filters/{filterId}
-          method: get
-          request:
-            parameters:
-              paths:
-                filterId: true
-
+          path: /{proxy+}
+          method: any
